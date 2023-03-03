@@ -13,7 +13,7 @@ export class NetworkingService {
     }
 
     getTestUser(): Observable<User> {
-        return of(new User(0, "jonaspfeifer@drei.at", "Jonas", "Pfeifer", "02c9cfda531c4464d1204547d744849c0642a0f622872c9504575a3ee51c9560", 0, "2022-01-01"))
+        return of(new User(0, "jonaspfeifer@drei.at", "Jonas", "Pfeifer", "02c9cfda531c4464d1204547d744849c0642a0f622872c9504575a3ee51c9560", 27.99, "2022-01-01"))
     }
 
     getTestLastNGames(n: number): Observable<GameHistory[]> {

@@ -1,23 +1,25 @@
 <div id="dashboard">
     <div id="menu">
         <div id="pageIcon">
-            <img src="assets/logo.png" alt="">
+            <img (click)="companyIcon()" src="assets/logo.png" alt="">
         </div>
         <hr>
         <div id="redirects">
-            <div>Games</div>
+            <div id="gameName">Games</div>
             <ul>
-                <li><a href="">Blackjack</a></li>
-                <li><a href="">Poker</a></li>
-                <li><a href="">Roulette</a></li>
-                <li><a href="">Slots</a></li>
-                <li><a href="">Horse Race</a></li>
+                <li (click)="blackjack()"><img src="assets/blackjack.png" alt=""><a href="">Blackjack</a></li>
+                <li (click)="poker()"><img src="assets/poker.png" alt=""><a href="">Poker</a></li>
+                <li (click)="roulette()"><img src="assets/roulette.png" alt=""><a href="">Roulette</a></li>
+                <li (click)="slots()"><img src="assets/slots.png" alt=""><a href="">Slots</a></li>
+                <li (click)="horse()"><img src="assets/horse.png" alt=""><a href="">Horse Race</a></li>
             </ul>
         </div>
         <hr>
         <div id="operations">
-            <a href="">log out</a>
-            <a href="">login</a>
+            <ul>
+                <li (click)="logout()"><img alt="" src="assets/logOut.png"><a href="">log out</a></li>
+                <li (click)="login()"><img alt="" src="assets/logIn.png"><a href="">login</a></li>
+            </ul>
         </div>
     </div>
     <div id="overview">
@@ -26,13 +28,13 @@
                 <div>Overview</div>
             </div>
             <div id="accountIcon">
-                <img src="assets/logo.png" alt="">
+                <img (click)="userIcon()" src="assets/logo.png" alt="">
             </div>
         </div>
         <div id="content">
             <div id="accountBalance">
                 <div id="moneyAmount">
-                    <div>Current Balance: </div>
+                    <div>Current Balance:</div>
                     <div id="balance">{{user.money |number:'1.2-2'}}€</div>
                 </div>
                 <hr>
@@ -43,7 +45,9 @@
             <div id="history">
                 <div id="historyContent">
                     <ul>
-                        <li *ngFor="let history of histories"><game-history [history]="history"></game-history></li>
+                        <li *ngFor="let history of histories">
+                            <game-history [history]="history"></game-history>
+                        </li>
                     </ul>
                 </div>
             </div>

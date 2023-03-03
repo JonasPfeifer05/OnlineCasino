@@ -27,7 +27,7 @@
             height: 1.5px;
             width: 75%;
 
-            background-color: #205295;
+            background-color: #144272;
             border: none;
         }
 
@@ -53,10 +53,14 @@
             align-items: center;
 
             position: relative;
-            color: #205295;
 
             width: 100%;
             height: calc(100% - 300px);
+
+            color: #2C74B3;
+
+            #gameName {
+            }
 
             div {
                 margin: 20px;
@@ -67,14 +71,25 @@
 
             ul {
                 li {
+                    display: flex;
+                    justify-content: flex-start;
+                    align-items: center;
+
+                    gap: 10px;
+
+                    height: 25px;
                     margin: 30px;
 
-                    font-size: 19px;
+                    font-size: 18px;
 
                     text-align: center;
 
+                    img {
+                        height: 90%;
+                    }
+
                     a {
-                        color: #205295;
+                        color: #2C74B3;
                         text-decoration: none;
                     }
                 }
@@ -86,19 +101,39 @@
 
             display: flex;
             flex-direction: column;
-            justify-content: space-evenly;
+            justify-content: center;
             align-items: center;
 
             width: 100%;
             height: 150px;
 
+            color: #2C74B3;
 
+            ul {
+                li {
+                    display: flex;
+                    justify-content: flex-start;
+                    align-items: center;
 
-            a {
-                color: #205295;
-                text-decoration: none;
+                    gap: 10px;
+
+                    height: 25px;
+                    margin: 30px;
+
+                    font-size: 18px;
+
+                    text-align: center;
+
+                    img {
+                        height: 90%;
+                    }
+
+                    a {
+                        color: #2C74B3;
+                        text-decoration: none;
+                    }
+                }
             }
-
         }
 
     }

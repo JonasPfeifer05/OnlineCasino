@@ -30,7 +30,7 @@ export class DashboardComponent {
     }
 
     renderChart() {
-        const maxHistories = 30;
+        const maxHistories = 20;
         const historyCount = this.histories.length < maxHistories ? this.histories.length: maxHistories;
 
         const labels = [];
@@ -89,5 +89,41 @@ export class DashboardComponent {
         };
 
         new Chart("chart", config);
+    }
+
+    blackjack() {
+
+    }
+
+    poker() {
+
+    }
+
+    roulette() {
+
+    }
+
+    slots() {
+
+    }
+
+    horse() {
+
+    }
+
+    companyIcon() {
+
+    }
+
+    logout() {
+
+    }
+
+    login() {
+
+    }
+
+    userIcon() {
+
     }
 }
