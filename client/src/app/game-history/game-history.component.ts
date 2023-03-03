@@ -8,13 +8,13 @@ import {GameHistory} from "../../objects/game-history";
 })
 export class GameHistoryComponent {
     @Input() history: GameHistory = GameHistory.getDefault();
-    img: string = "assets/arrowUp.png";
+    img: string = "assets/increase.png";
 
     constructor() {
 
     }
 
     ngOnInit() {
-        this.img = this.history.won ? "assets/arrowUp.png" : "assets/arrowDown.png";
+        this.img = this.history.won ? "assets/increase.png" : "assets/decrease.png";
     }
 }
