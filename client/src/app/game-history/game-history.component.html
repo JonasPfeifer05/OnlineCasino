@@ -1,0 +1,13 @@
+<div id="gameHistoryElement">
+    <div id="nameWage">
+        <div id="name">{{history.game_id == 0 ? "Poker" : history.game_id == 1 ? "BlackJack" : history.game_id == 2 ? "Roulette" : history.game_id == 3 ? "Slots" : "Horse Race"}}:</div>
+        <div id="wage">Wage: {{history.wage|number:"1.2-2"}}€</div>
+    </div>
+    <div id="payout" [class.lost]="!history.won" [class.won]="history.won">
+        <div id="profitText">
+            <div id="profit">Profit: </div>
+            <div id="amount">{{history.profit}}</div>
+        </div>
+        <img [src]="img" alt="">
+    </div>
+</div>

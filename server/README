@@ -1,0 +1,4 @@
+Beispiel angelehnt an der Struktur von https://auth0.com/blog/node-js-and-typescript-tutorial-build-a-crud-api/#What-You-Will-Build aber mit mehr Typescript Einsatz
+
+Von hier wurde winston Verwendung übernommen:
+https://www.toptal.com/express-js/nodejs-typescript-rest-api-pt-1

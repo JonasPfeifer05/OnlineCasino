@@ -1,0 +1,52 @@
+<div id="dashboard">
+    <div id="menu">
+        <div id="pageIcon">
+            <img src="assets/logo.png" alt="">
+        </div>
+        <hr>
+        <div id="redirects">
+            <div>Games</div>
+            <ul>
+                <li><a href="">Blackjack</a></li>
+                <li><a href="">Poker</a></li>
+                <li><a href="">Roulette</a></li>
+                <li><a href="">Slots</a></li>
+                <li><a href="">Horse Race</a></li>
+            </ul>
+        </div>
+        <hr>
+        <div id="operations">
+            <a href="">log out</a>
+            <a href="">login</a>
+        </div>
+    </div>
+    <div id="overview">
+        <div id="header">
+            <div id="headerText">
+                <div>Overview</div>
+            </div>
+            <div id="accountIcon">
+                <img src="assets/logo.png" alt="">
+            </div>
+        </div>
+        <div id="content">
+            <div id="accountBalance">
+                <div id="moneyAmount">
+                    <div>Current Balance: </div>
+                    <div id="balance">{{user.money |number:'1.2-2'}}€</div>
+                </div>
+                <hr>
+                <div id="profitCurve">
+                    <canvas id="chart"></canvas>
+                </div>
+            </div>
+            <div id="history">
+                <div id="historyContent">
+                    <ul>
+                        <li *ngFor="let history of histories"><game-history [history]="history"></game-history></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
