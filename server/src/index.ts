@@ -8,6 +8,7 @@ import express, {Express} from "express";
 import cors from "cors";
 import helmet from "helmet";
 import {UsersRouter} from "./users/users.router";
+import {HistoriesRouter} from "./histories/histories.router";
 
 dotenv.config();
 if (!process.env.PORT) {
@@ -60,6 +61,7 @@ class Application{
 
     private addRoutes(){
         this.express.use("/users", new UsersRouter().router);
+        this.express.use("/histories", new HistoriesRouter().router);
     }
 
     public run(){

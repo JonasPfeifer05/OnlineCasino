@@ -1,5 +1,5 @@
 import {User} from "./user";
-import {sqlQuery} from "../db";
+import {singleSqlQuery} from "../db";
 
 export class UsersStorage {
     async getUser(email: string, password: string): Promise<User> {
@@ -8,7 +8,7 @@ export class UsersStorage {
             WHERE email = '${email}' AND password = '${password}';
         `
 
-        return await sqlQuery<User>(sql)
+        return await singleSqlQuery<User>(sql)
             .catch(reason => {
                 throw reason;
             });
@@ -24,7 +24,7 @@ export class UsersStorage {
         `
 
         let user: User|undefined;
-        await sqlQuery<User>(sql, 1)
+        await singleSqlQuery<User>(sql, 1)
             .then(value => user = value)
             .catch(reason => {
                 throw reason;
