@@ -1,5 +1,6 @@
 import {User} from "./user";
 import {singleSqlQuery} from "../db";
+import {error} from "winston";
 
 export class UsersStorage {
     async getUser(email: string, password: string): Promise<User> {
@@ -26,6 +27,26 @@ export class UsersStorage {
         let user: User|undefined;
         await singleSqlQuery<User>(sql, 1)
             .then(value => user = value)
+            .catch(reason => {
+                throw reason;
+            })
+
+        return user;
+    }
+
+    async changeUser(data: User, old: User) {
+        let sql = "UPDATE casino.users SET "
+
+        if (data.email) sql += "email='"+data.email+"',";
+        if (data.password) sql += "password='"+data.password+"',";
+        if (data.first_name) sql += "first_name='"+data.first_name+"',";
+        if (data.last_name) sql += "last_name='"+data.last_name+"',";
+        if (data.username) sql += "username='"+data.username+"',";
+        sql = sql.substring(0, sql.length-1);
+        sql += ";";
+        sql += "SELECT * FROM casino.users WHERE users_id = "+old.users_id+";"
+
+        let user: User = await singleSqlQuery<User>(sql, 1)
             .catch(reason => {
                 throw reason;
             })

@@ -90,7 +90,7 @@ export class UsersService {
         return [accessToken, refreshToken]
     }
 
-    async refreshToken(refresh_token: string | undefined) {
+    async refreshToken(refresh_token: string | undefined): Promise<string> {
         let error: Error|undefined;
 
         let refresh: UserToken = await this.authenticateJWT(refresh_token, process.env.JWT_REFRESH_TOKEN).catch(reason => error = reason);
@@ -101,6 +101,37 @@ export class UsersService {
         if (error) throw error;
 
         return token
+    }
+
+    async changeUser(userData: UserToken, data: User): Promise<User> {
+        let error: Error|undefined;
+
+        let result: User = await this.storage.getUser(userData.email, userData.password)
+            .catch(reason => error = reason);
+
+        if (error) throw new Error("Email or Password is wrong!");
+        if (!result) throw new Error("There is no such User!");
+
+        if (!(data.email || data.password || data.last_name || data.first_name || data.username)) throw new Error("Must specify at least one field!")
+
+        if (data.email) data.email = data.email.trim();
+        if (data.password) data.password = data.password.trim();
+        if (data.first_name) data.first_name = data.first_name.trim();
+        if (data.last_name) data.last_name = data.last_name.trim();
+        if (data.username) data.username = data.username.trim();
+
+        if (data.email && data.email.length === 0) throw new Error("Invalid Data passed!")
+        if (data.password && data.password.length === 0) throw new Error("Invalid Data passed!")
+        if (data.first_name && data.first_name.length === 0) throw new Error("Invalid Data passed!")
+        if (data.last_name && data.last_name.length === 0) throw new Error("Invalid Data passed!")
+        if (data.username && data.username.length === 0) throw new Error("Invalid Data passed!")
+
+        let user: User = await this.storage.changeUser(data, result).catch(reason => error = reason);
+
+        if (error) throw new Error("Email or Username is already in use!");
+        if (!user) throw new Error("Failed to create User!");
+
+        return user;
     }
 }
 
