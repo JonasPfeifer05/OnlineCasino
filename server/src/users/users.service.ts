@@ -133,5 +133,9 @@ export class UsersService {
 
         return user;
     }
+
+    async changeActive(userData: UserToken, active: boolean) {
+        await this.storage.setActive(userData.email, active);
+    }
 }
 

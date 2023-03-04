@@ -42,6 +42,28 @@ export class UsersRouter {
             res.status(200).json(user);
         });
 
+        this.router.post("/deactivate", async (req, res) => {
+            let error: Error | undefined;
+
+            let userData: UserToken = await this.service.authenticateJWT(req.headers.authorization, process.env.JWT_AUTH_TOKEN).catch(reason => error = reason);
+            if (error) return res.status(400).json({message: error.message});
+
+            await this.service.changeActive(userData, false);
+
+            res.status(200).json({message: "success"})
+        });
+
+        this.router.post("/activate", async (req, res) => {
+            let error: Error | undefined;
+
+            let userData: UserToken = await this.service.authenticateJWT(req.headers.authorization, process.env.JWT_AUTH_TOKEN).catch(reason => error = reason);
+            if (error) return res.status(400).json({message: error.message});
+
+            await this.service.changeActive(userData, true);
+
+            res.status(200).json({message: "success"})
+        });
+
         this.router.post("/login", async (req, res) => {
             let error: Error | undefined;
 
