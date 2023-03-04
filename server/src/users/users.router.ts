@@ -11,23 +11,19 @@ export class UsersRouter {
         this.service = new UsersService();
 
         this.router.post("/create", async (req, res) => {
-            let data: User = req.body;
+            let error: Error|undefined;
+            let user: User = await this.service.createUser(req.body).catch(reason => error = reason);
 
-            if (!data.first_name || !data.last_name || !data.email || !data.password || !data.username) return res.status(400).json({reason: "Not enough data passed!"})
-
-            let user = await this.service.createUser(data);
-
-            if (!user) return res.status(400).json({reason: "Email already in use or data is invalid!"})
+            if (error) return res.status(400).json({message: error.message});
 
             res.status(200).json(user);
         })
 
         this.router.post("/get", async (req, res) => {
-            let email = req.body.email;
-            let password = req.body.password;
-            let user = await this.service.getUser(email, password);
+            let error: Error|undefined;
+            let user: User = await this.service.getUser(req.body).catch(reason => error = reason);
 
-            if (!user) return res.status(400).json({reason: "Invalid user data!"})
+            if (error) return res.status(400).json({message: error.message});
 
             res.status(200).json(user);
         })
