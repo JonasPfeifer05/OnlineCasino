@@ -3,6 +3,8 @@ import {HttpClient, HttpErrorResponse} from "@angular/common/http";
 import {lastValueFrom, Observable, of} from "rxjs";
 import {User} from "../objects/user";
 import {GameHistory} from "../objects/game-history";
+import {LoggerService} from "./logger.service";
+import {LoggingType} from "../objects/logging-type";
 
 @Injectable({
     providedIn: 'root'
@@ -11,17 +13,16 @@ export class NetworkingService {
 
     api: string = "http://localhost:7000/";
 
-    constructor(private http: HttpClient) {
-    }
+    constructor(private http: HttpClient, private logger: LoggerService) {}
 
-    getAccessToken(): string {
+    static getAccessToken(): string {
         let access_token = sessionStorage.getItem("access_token");
         if (!access_token) access_token = "";
 
         return access_token;
     }
 
-    getRefreshToken(): string {
+    static getRefreshToken(): string {
         let refresh_token = sessionStorage.getItem("refresh_token");
         if (!refresh_token) refresh_token = "";
 
@@ -39,7 +40,7 @@ export class NetworkingService {
     }
 
     async refreshToken(): Promise<boolean> {
-        let observable = this.http.get<{ token: string }>(this.api + "users/refresh");
+        let observable = this.http.post<{ token: string }>(this.api + "users/refresh", {refresh_token: NetworkingService.getRefreshToken()});
         let token: string | undefined;
         this.handle(await this.evaluate(observable), (result) => {
             token = result.token;
@@ -48,6 +49,37 @@ export class NetworkingService {
         if (token) sessionStorage.setItem("access_token", token)
 
         return token !== undefined;
+    }
+
+    async checkTokens(): Promise<boolean> {
+        let valid = await this.validateAccessToken();
+        if (!valid) valid = await this.refreshToken();
+        return valid;
+    }
+
+    async login(email: string, password: string): Promise<boolean> {
+        let observable = this.http.post<{access_token: string, refresh_token: string}>(this.api+"users/login", {email, password});
+
+        let loggedIn = false;
+        this.handle(await this.evaluate(observable), result => {
+            loggedIn = true;
+            sessionStorage.setItem("access_token", result.access_token);
+            sessionStorage.setItem("refresh_token", result.refresh_token);
+        }, "Failed to log user in!");
+
+        return loggedIn;
+    }
+
+    async getUserData(): Promise<Observable<User>> {
+        if (!await this.checkTokens()) throw new Error("Couldnt authorize User! Must log in again!");
+
+        return this.http.post<User>(this.api+"users/get", {});
+    }
+
+    async getUserHistory(amount: number): Promise<Observable<GameHistory[]>> {
+        if (!await this.checkTokens()) throw new Error("Couldnt authorize User! Must log in again!");
+
+        return this.http.post<GameHistory[]>(this.api+"histories/get", {amount});
     }
 
     getTestUser(): Observable<User> {
@@ -83,8 +115,8 @@ export class NetworkingService {
         if (result) {
             success(result);
         } else {
-            console.log(error)
-            console.log(errorMessage);
+            this.logger.log(error, LoggingType.ERROR);
+            this.logger.log(errorMessage, LoggingType.ERROR);
         }
     }
 }

@@ -6,7 +6,7 @@ import {LoggingType} from "../objects/logging-type";
 })
 export class LoggerService {
 
-    maxLevel: number = 0;
+    maxLevel: number = LoggingType.DEBUGGING;
 
     constructor() {
     }
@@ -15,7 +15,7 @@ export class LoggerService {
         this.maxLevel = level;
     }
 
-    log(message: string, type: LoggingType) {
+    log(message: any, type: LoggingType) {
 
         let color: string = "#fff";
 
@@ -38,7 +38,7 @@ export class LoggerService {
             color = "#9ef56c";
         }
 
-            console.log(`%c${message}`, `color: ${color};`);
+        console.log(`%c${message}`, `color: ${color};`);
     }
 
 }
