@@ -7,6 +7,8 @@ import * as expressWinston from 'express-winston';
 import express, {Express} from "express";
 import cors from "cors";
 import helmet from "helmet";
+import {UsersRouter} from "./users/users.router";
+import {HistoriesRouter} from "./histories/histories.router";
 
 dotenv.config();
 if (!process.env.PORT) {
@@ -58,14 +60,11 @@ class Application{
     }
 
     private addRoutes(){
-        /** Add new Main-Routes here (i.e. 'api/blog', 'api/student', 'ws/message', ...) */
-
+        this.express.use("/users", new UsersRouter().router);
+        this.express.use("/histories", new HistoriesRouter().router);
     }
 
     public run(){
-
-        /** change port in .env-file, not here! */
-
         this.express.listen(PORT, () => {
             console.log(`Listening on port ${PORT}`);
         });
