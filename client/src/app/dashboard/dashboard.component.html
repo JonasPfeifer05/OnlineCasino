@@ -45,7 +45,7 @@
             <div id="history">
                 <div id="historyContent">
                     <ul>
-                        <li *ngFor="let history of histories">
+                        <li *ngFor="let history of histories.reverse()">
                             <game-history [history]="history"></game-history>
                         </li>
                     </ul>

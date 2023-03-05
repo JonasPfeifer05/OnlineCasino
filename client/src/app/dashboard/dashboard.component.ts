@@ -48,7 +48,7 @@ export class DashboardComponent {
             labels: labels,
             datasets: [{
                 label: 'Profit Curve',
-                data: labels.map(value => this.histories[this.histories.length - value].profit),
+                data: labels.map(value => this.histories[this.histories.length - value].profit/100),
             }]
         };
 
