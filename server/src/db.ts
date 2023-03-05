@@ -32,7 +32,6 @@ export async function singleSqlQuery<T>(sql: string, index = 0): Promise<T> {
         })
         .catch(reason => error = reason);
 
-
     if (error) throw error;
 
     return value[index];

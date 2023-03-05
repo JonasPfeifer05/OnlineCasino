@@ -7,4 +7,6 @@ export interface User {
     username: string;
     money: number;
     entry_date: string;
+    deactivated: boolean;
+    deactivated_since: Date;
 }
