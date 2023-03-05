@@ -1,0 +1,56 @@
+<div id="loginContainer">
+
+    <!--    <div id="selection">-->
+
+    <!--        <input type="radio" class="radioButtons" id="login" checked>-->
+    <!--        <input type="radio" class="radioButtons" id="signup">-->
+    <!--        <label for="login" class="radioButtons login">Login</label>-->
+    <!--        <label for="signup" class="radioButtons signup">Signup</label>-->
+    <!--        <div class="slider-tab"></div>-->
+
+    <!--    </div>-->
+
+    <form id="formWrapper" [noValidate]="false">
+
+        <h1 class="header" *ngIf="login else signupHeader">Login</h1>
+        <ng-template #signupHeader>
+            <h1 class="header">Sign Up</h1>
+        </ng-template>
+
+        <div id="selectionWrapper">
+            <div class="slide-controls">
+                <input type="radio" name="slide" id="login" checked (click)="changeLogin(true)">
+                <input type="radio" name="slide" id="signup" (click)="changeLogin(false)">
+                <label for="login" class="slide login">Login</label>
+                <label for="signup" class="slide signup">Signup</label>
+            </div>
+        </div>
+
+
+        <div class="inputs" *ngIf="!login else logIn">
+            <section class="inputSections"><label>Username</label><input [(ngModel)]="username" placeholder="Username" type="text" required></section>
+            <section class="inputSections"><label>Firstname</label><input [(ngModel)]="firstName" placeholder="Firstname" type="text" required></section>
+            <section class="inputSections"><label>Lastname</label><input [(ngModel)]="lastName" placeholder="LastName" type="text" required></section>
+            <section class="inputSections"><label>E-Mail</label><input [(ngModel)]="eMailAddress" placeholder="E-Mail" type="email" required></section>
+            <section class="inputSections"><label>Password</label><input [(ngModel)]="password" placeholder="Password" type="password" required minlength="8"></section>
+            <section class="inputSections"><label>Password confirm</label><input [(ngModel)]="passwordConfirmation" placeholder="Confirm Password" type="password" required minlength="8"></section>
+        </div>
+        <ng-template #logIn>
+            <div class="inputs">
+                <section class="inputSections"><label>E-Mail</label><input [(ngModel)]="eMailAddress" placeholder="E-Mail" type="email" required></section>
+                <section class="inputSections"><label>Password</label><input [(ngModel)]="password" placeholder="Password" type="password" required minlength="8"></section>
+            </div>
+        </ng-template>
+
+        <div id="buttons">
+
+            <input *ngIf="login else signUpButton" class="loginButtons" type="submit" (click)="handleLogin()" value="Login">
+            <ng-template #signUpButton><input class="loginButtons" type="submit" (click)="handleSignUp()" value="Sign Up"></ng-template>
+
+        </div>
+
+    </form>
+
+
+</div>
+

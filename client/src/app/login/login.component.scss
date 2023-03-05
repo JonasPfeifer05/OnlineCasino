@@ -1,0 +1,136 @@
+.slide-controls{
+    position: relative;
+    display: flex;
+    height: 50px;
+    width: 100%;
+    overflow: hidden;
+    //margin: 30px 0 10px 0;
+    justify-content: space-between;
+    //border: 1px solid lightgrey;
+    border-radius: 5px;
+}
+.slide-controls .slide{
+    height: 100%;
+    width: 100%;
+    color: #fff;
+    font-size: 18px;
+    font-weight: 500;
+    text-align: center;
+    line-height: 48px;
+    cursor: pointer;
+    z-index: 1;
+}
+.slide-controls label.signup{
+    color: #000;
+}
+input[type="radio"]{
+    display: none;
+}
+#signup:checked ~ .slider-tab{
+    left: 50%;
+}
+#signup:checked ~ label.signup{
+    color: red;
+    cursor: default;
+    user-select: none;
+    background-color: darken(#f0f2f1, 10);
+}
+#signup:checked ~ label.login{
+    color: #000;
+}
+#login:checked ~ label.signup{
+    color: #000;
+}
+#login:checked ~ label.login{
+    color: red;
+    cursor: default;
+    user-select: none;
+    background-color: darken(#f0f2f1, 10);
+}
+
+
+
+
+
+#selectionWrapper{
+    width: 100%;
+    background-color: #f0f2f1;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+
+#loginContainer{
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    height: 500px;
+
+
+}
+.inputs{
+    display: flex;
+    flex-direction: column;
+}
+.inputs input{
+    display: inline;
+    margin: 10px;
+    border-radius: 20px;
+    text-align: center;
+    font-size: large;
+}
+.inputs label{
+    display: inline-block;
+    margin: 10px;
+    width: 150px;
+    font-size: larger;
+
+}
+
+
+//.slide{
+//    border: gray 2px solid;
+//}
+
+//.inputs{
+//    border: gray 2px solid;
+//}
+#formWrapper{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #FFF;
+    border-radius: 20px;
+    padding: 10px;
+
+}
+.slide-controls{
+    display: flex;
+
+}
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+.header{
+    padding-top: 10px;
+    margin-bottom: 10px;
+}
+.loginButtons{
+    background-color: #f0f2f1;
+    border: #f0f2f1;
+    border-radius: 10px;
+    font-size: large;
+    font-weight: bold;
+    padding: 10px;
+}
+.loginButtons:hover{
+    background-color: darken(#f0f2f1, 10);
+    cursor: pointer;
+}
+.slide:hover{
+    background-color: darken(#f0f2f1, 10);
+}
