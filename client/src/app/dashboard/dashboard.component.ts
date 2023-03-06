@@ -32,6 +32,13 @@ export class DashboardComponent {
         this.http.handle(await this.http.evaluate(await this.http.getUserHistory(100)), result => {
             this.logger.log("Got user game histories!", LoggingType.INFORMATIONAL);
             this.histories = result;
+
+            this.histories = this.histories.map(value => {
+                let tmp = value;
+                tmp.won = (value.won as any)["data"][0] === 1;
+                return tmp;
+            });
+
             this.renderChart();
         }, "Couldnt get user History");
     }
