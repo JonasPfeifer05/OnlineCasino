@@ -69,6 +69,12 @@ export class NetworkingService {
 
         return loggedIn;
     }
+
+    static cleatTokens() {
+        sessionStorage.setItem("access_token", "");
+        sessionStorage.setItem("refresh_token", "");
+    }
+
     async signUp(username: string, first_name: string, last_name: string, email: string, password: string): Promise<boolean> {
         let observable = this.http.post<{access_token: string, refresh_token: string}>(this.api+"users/create", {username, first_name, last_name, email, password});
 

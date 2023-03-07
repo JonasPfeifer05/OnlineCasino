@@ -135,7 +135,7 @@ export class DashboardComponent {
     }
 
     logout() {
-
+        NetworkingService.cleatTokens();
     }
 
     login() {

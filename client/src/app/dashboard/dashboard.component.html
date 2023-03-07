@@ -17,8 +17,8 @@
         <hr>
         <div id="operations">
             <ul>
-                <li (click)="logout()"><img alt="" src="assets/logOut.png"><a href="">log out</a></li>
-                <li (click)="login()"><img alt="" src="assets/logIn.png"><a href="">login</a></li>
+                <li [routerLink]="['login']" (click)="logout()"><img alt="" src="assets/logOut.png"><a href="">log out</a></li>
+                <li [routerLink]="['login']" (click)="login()"><img alt="" src="assets/logIn.png"><a href="">login</a></li>
             </ul>
         </div>
     </div>
