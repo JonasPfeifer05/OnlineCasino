@@ -12,7 +12,7 @@
 .slide-controls .slide{
     height: 100%;
     width: 100%;
-    color: #fff;
+    //color: #fff;
     font-size: 18px;
     font-weight: 500;
     text-align: center;
@@ -20,9 +20,9 @@
     cursor: pointer;
     z-index: 1;
 }
-.slide-controls label.signup{
-    color: #000;
-}
+//.slide-controls label.signup{
+//    color: #000;
+//}
 input[type="radio"]{
     display: none;
 }
@@ -30,7 +30,7 @@ input[type="radio"]{
     left: 50%;
 }
 #signup:checked ~ label.signup{
-    color: red;
+    //color: red;
     cursor: default;
     user-select: none;
     background-color: darken(#f0f2f1, 10);
@@ -42,7 +42,7 @@ input[type="radio"]{
     color: #000;
 }
 #login:checked ~ label.login{
-    color: red;
+    //color: red;
     cursor: default;
     user-select: none;
     background-color: darken(#f0f2f1, 10);
@@ -66,7 +66,7 @@ input[type="radio"]{
     flex-direction: column;
     align-items: center;
     gap: 10px;
-    height: 500px;
+    height: 100vh;
 
 
 }
@@ -84,7 +84,7 @@ input[type="radio"]{
 .inputs label{
     display: inline-block;
     margin: 10px;
-    width: 150px;
+    width: 200px;
     font-size: larger;
 
 }
@@ -104,6 +104,7 @@ input[type="radio"]{
     background-color: #FFF;
     border-radius: 20px;
     padding: 10px;
+    box-sizing: border-box;
 
 }
 .slide-controls{
@@ -125,12 +126,13 @@ input[type="radio"]{
     border-radius: 10px;
     font-size: large;
     font-weight: bold;
-    padding: 10px;
+    padding: 12px;
+    margin: 10px;
 }
 .loginButtons:hover{
-    background-color: darken(#f0f2f1, 10);
+    background-color: darken(#f0f2f1, 20);
     cursor: pointer;
 }
 .slide:hover{
-    background-color: darken(#f0f2f1, 10);
+    background-color: darken(#f0f2f1, 20);
 }
