@@ -29,6 +29,9 @@ export class DashboardComponent {
         this.http.handle(await this.http.evaluate(await this.http.getUserData()), result => {
             this.logger.log("Got user data!", LoggingType.INFORMATIONAL);
             this.user = result;
+            if (!this.user.money){
+                this.user.money = 0;
+            }
         }, "Failed to get user with token!");
 
         this.http.handle(await this.http.evaluate(await this.http.getUserHistory(100)), result => {

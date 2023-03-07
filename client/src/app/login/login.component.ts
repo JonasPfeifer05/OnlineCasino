@@ -1,12 +1,12 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
 import {NetworkingService} from "../../services/networking.service";
 import * as shajs from "sha.js";
 import {Router} from "@angular/router";
 
 @Component({
-  selector: 'app-login',
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss']
+    selector: 'app-login',
+    templateUrl: './login.component.html',
+    styleUrls: ['./login.component.scss']
 })
 export class LoginComponent {
 
@@ -19,10 +19,10 @@ export class LoginComponent {
     passwordConfirmation: string = "";
 
 
-    constructor(private networkingService: NetworkingService, private router : Router) {
+    constructor(private networkingService: NetworkingService, private router: Router) {
     }
 
-    changeLogin(login: boolean){
+    changeLogin(login: boolean) {
         this.login = login;
     }
 
@@ -32,12 +32,7 @@ export class LoginComponent {
 
     async handleLogin() {
 
-        // console.log( shajs("sha256").update(this.password).digest("hex"));
-
-        console.log(this.eMailAddress)
-        console.log(this.password);
-
-        if (!await this.networkingService.login(this.eMailAddress, shajs("sha256").update(this.password).digest("hex"))){
+        if (!await this.networkingService.login(this.eMailAddress, shajs("sha256").update(this.password).digest("hex"))) {
             alert("E-Mail-Adresse oder Passwort ungueltig!")
         } else {
             await this.router.navigate(["dashboard"])
@@ -45,14 +40,22 @@ export class LoginComponent {
         //     handel the login and checking if login is valid
     }
 
-    handleSignUp() {
-        if (this.checkPassword()){
+    async handleSignUp() {
+        if (this.checkPassword()) {
+            if (await this.networkingService.signUp(this.username, this.firstName, this.lastName, this.eMailAddress, shajs("sha256").update(this.password).digest("hex"))) {
+                await this.router.navigate(["dashboard"])
+            } else {
+                alert("Username or E-Mail already in use!")
+            }
 
+
+        } else {
+            alert("Password Confirmation wrong!")
         }
     }
 
-    checkPassword() : boolean{
-        if (this.password !== "" && this.passwordConfirmation !== ""){
+    checkPassword(): boolean {
+        if (this.password !== "" && this.passwordConfirmation !== "") {
             return this.password === this.passwordConfirmation;
         }
         return false;

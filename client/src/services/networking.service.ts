@@ -69,7 +69,18 @@ export class NetworkingService {
 
         return loggedIn;
     }
+    async signUp(username: string, first_name: string, last_name: string, email: string, password: string): Promise<boolean> {
+        let observable = this.http.post<{access_token: string, refresh_token: string}>(this.api+"users/create", {username, first_name, last_name, email, password});
 
+        let signedUp = false;
+        this.handle(await this.evaluate(observable), async result => {
+                signedUp = true;
+                await this.login(email, password)
+            },
+            "Failed to create user!");
+
+        return signedUp;
+    }
     async getUserData(): Promise<Observable<User>> {
         if (!await this.checkTokens()) throw new Error("Couldnt authorize User! Must log in again!");
 
