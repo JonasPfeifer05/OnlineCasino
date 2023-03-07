@@ -47,8 +47,6 @@ export class LoginComponent {
             } else {
                 alert("Username or E-Mail already in use!")
             }
-
-
         } else {
             alert("Password Confirmation wrong!")
         }

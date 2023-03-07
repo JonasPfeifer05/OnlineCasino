@@ -79,7 +79,7 @@ export class NetworkingService {
         let observable = this.http.post<{access_token: string, refresh_token: string}>(this.api+"users/create", {username, first_name, last_name, email, password});
 
         let signedUp = false;
-        this.handle(await this.evaluate(observable), async result => {
+        await this.handle(await this.evaluate(observable), async result => {
                 signedUp = true;
                 await this.login(email, password)
             },
