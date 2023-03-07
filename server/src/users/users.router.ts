@@ -67,8 +67,9 @@ export class UsersRouter {
         this.router.post("/login", async (req, res) => {
             let error: Error | undefined;
 
-            let [access_token, refresh_token] = await this.service.login(req.body).catch(reason => error = reason);
+            let tokens = await this.service.login(req.body as UserToken).catch(reason => error = reason);
             if (error) return res.status(400).json({message: error.message});
+            let [access_token, refresh_token] = tokens;
 
             res.status(200).json({access_token, refresh_token});
         })
@@ -84,6 +85,8 @@ export class UsersRouter {
 
         this.router.get("/validate", async (req, res) => {
             let error: Error|undefined;
+
+            console.log(req.headers.authorization);
 
             await this.service.authenticateJWT(req.headers.authorization, process.env.JWT_AUTH_TOKEN).catch(reason => error = reason);
             if (error) return res.status(400).json({valid: false});

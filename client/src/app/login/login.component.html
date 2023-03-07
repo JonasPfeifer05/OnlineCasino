@@ -10,7 +10,7 @@
 
     <!--    </div>-->
 
-    <form id="formWrapper" [noValidate]="false">
+    <form id="formWrapper" [noValidate]="false" (submit)="logInSignUp()">
 
         <h1 class="header" *ngIf="login else signupHeader">Login</h1>
         <ng-template #signupHeader>
@@ -28,24 +28,24 @@
 
 
         <div class="inputs" *ngIf="!login else logIn">
-            <section class="inputSections"><label>Username</label><input [(ngModel)]="username" placeholder="Username" type="text" required></section>
-            <section class="inputSections"><label>Firstname</label><input [(ngModel)]="firstName" placeholder="Firstname" type="text" required></section>
-            <section class="inputSections"><label>Lastname</label><input [(ngModel)]="lastName" placeholder="LastName" type="text" required></section>
-            <section class="inputSections"><label>E-Mail</label><input [(ngModel)]="eMailAddress" placeholder="E-Mail" type="email" required></section>
-            <section class="inputSections"><label>Password</label><input [(ngModel)]="password" placeholder="Password" type="password" required minlength="8"></section>
-            <section class="inputSections"><label>Confirm Password</label><input [(ngModel)]="passwordConfirmation" placeholder="Confirm Password" type="password" required minlength="8"></section>
+            <section class="inputSections"><label>Username</label><input [(ngModel)]="username" placeholder="Username" type="text" required [ngModelOptions]="{standalone: true}"></section>
+            <section class="inputSections"><label>Firstname</label><input [(ngModel)]="firstName" placeholder="Firstname" type="text" required [ngModelOptions]="{standalone: true}"></section>
+            <section class="inputSections"><label>Lastname</label><input [(ngModel)]="lastName" placeholder="LastName" type="text" required [ngModelOptions]="{standalone: true}"></section>
+            <section class="inputSections"><label>E-Mail</label><input [(ngModel)]="eMailAddress" placeholder="E-Mail" type="email" required [ngModelOptions]="{standalone: true}"></section>
+            <section class="inputSections"><label>Password</label><input [(ngModel)]="password" placeholder="Password" type="password" required minlength="8" [ngModelOptions]="{standalone: true}"></section>
+            <section class="inputSections"><label>Confirm Password</label><input [(ngModel)]="passwordConfirmation" placeholder="Confirm Password" type="password" required minlength="8" [ngModelOptions]="{standalone: true}"></section>
         </div>
         <ng-template #logIn>
             <div class="inputs">
-                <section class="inputSections"><label>E-Mail</label><input [(ngModel)]="eMailAddress" placeholder="E-Mail" type="email" required></section>
-                <section class="inputSections"><label>Password</label><input [(ngModel)]="password" placeholder="Password" type="password" required minlength="8"></section>
+                <section class="inputSections"><label>E-Mail</label><input [(ngModel)]="eMailAddress" placeholder="E-Mail" type="email" required [ngModelOptions]="{standalone: true}"></section>
+                <section class="inputSections"><label>Password</label><input [(ngModel)]="password" placeholder="Password" type="password" required minlength="8" [ngModelOptions]="{standalone: true}"></section>
             </div>
         </ng-template>
 
         <div id="buttons">
 
-            <input *ngIf="login else signUpButton" class="loginButtons" type="submit" (click)="handleLogin()" value="Login">
-            <ng-template #signUpButton><input class="loginButtons" type="submit" (click)="handleSignUp()" value="Sign Up"></ng-template>
+            <input *ngIf="login else signUpButton" class="loginButtons" type="submit" value="Login">
+            <ng-template #signUpButton><input class="loginButtons" type="submit" value="Sign Up"></ng-template>
 
         </div>
 

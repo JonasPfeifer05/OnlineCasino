@@ -21,8 +21,10 @@ export class DashboardComponent {
     }
 
     async ngOnInit() {
-        // Just for testing
-        await this.http.login("jonaspfeifer@drei.at", "532eaabd9574880dbf76b9b8cc00832c20a6ec113d682299550d7a6e0f345e25");
+
+        console.log(NetworkingService.getAccessToken())
+        // // Just for testing
+        // await this.http.login("jonaspfeifer@drei.at", "532eaabd9574880dbf76b9b8cc00832c20a6ec113d682299550d7a6e0f345e25");
 
         this.http.handle(await this.http.evaluate(await this.http.getUserData()), result => {
             this.logger.log("Got user data!", LoggingType.INFORMATIONAL);

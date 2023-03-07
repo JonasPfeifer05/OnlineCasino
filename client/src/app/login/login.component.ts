@@ -1,4 +1,7 @@
 import { Component } from '@angular/core';
+import {NetworkingService} from "../../services/networking.service";
+import * as shajs from "sha.js";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-login',
@@ -16,6 +19,9 @@ export class LoginComponent {
     passwordConfirmation: string = "";
 
 
+    constructor(private networkingService: NetworkingService, private router : Router) {
+    }
+
     changeLogin(login: boolean){
         this.login = login;
     }
@@ -24,8 +30,19 @@ export class LoginComponent {
     // login and signup handling temporary
     // can be changed if necessary
 
-    handleLogin() {
-    //     handel the login and checking if login is valid
+    async handleLogin() {
+
+        // console.log( shajs("sha256").update(this.password).digest("hex"));
+
+        console.log(this.eMailAddress)
+        console.log(this.password);
+
+        if (!await this.networkingService.login(this.eMailAddress, shajs("sha256").update(this.password).digest("hex"))){
+            alert("E-Mail-Adresse oder Passwort ungueltig!")
+        } else {
+            await this.router.navigate(["dashboard"])
+        }
+        //     handel the login and checking if login is valid
     }
 
     handleSignUp() {
@@ -39,5 +56,13 @@ export class LoginComponent {
             return this.password === this.passwordConfirmation;
         }
         return false;
+    }
+
+    async logInSignUp() {
+        if (this.login) {
+            await this.handleLogin();
+        } else {
+            this.handleSignUp();
+        }
     }
 }
