@@ -65,7 +65,7 @@ export class LoginComponent {
         if (this.login) {
             await this.handleLogin();
         } else {
-            this.handleSignUp();
+            await this.handleSignUp();
         }
     }
 }
