@@ -6,23 +6,19 @@ import { AppComponent } from './app.component';
 import {HttpClientModule} from "@angular/common/http";
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { GameHistoryComponent } from './game-history/game-history.component';
-import {LoginComponent} from "./login/login.component";
-import {FormsModule} from "@angular/forms";
 
 
 @NgModule({
-    declarations: [
-        AppComponent,
-        DashboardComponent,
-        GameHistoryComponent,
-        LoginComponent
-    ],
-    imports: [
-        HttpClientModule,
-        BrowserModule,
-        AppRoutingModule,
-        FormsModule
-    ],
+  declarations: [
+    AppComponent,
+    DashboardComponent,
+    GameHistoryComponent
+  ],
+  imports: [
+    HttpClientModule,
+    BrowserModule,
+    AppRoutingModule
+  ],
   providers: [
   ],
   bootstrap: [AppComponent]

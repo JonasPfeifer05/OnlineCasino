@@ -3,6 +3,8 @@ import {User} from "../../objects/user";
 import {NetworkingService} from "../../services/networking.service";
 import {Chart, ChartConfiguration, ChartData, registerables} from "chart.js"
 import {GameHistory} from "../../objects/game-history";
+import {LoggerService} from "../../services/logger.service";
+import {LoggingType} from "../../objects/logging-type";
 
 Chart.register(...registerables)
 
@@ -15,18 +17,30 @@ export class DashboardComponent {
     user: User = User.default();
     histories: GameHistory[] = [];
 
-    constructor(private http: NetworkingService) {
+    constructor(private http: NetworkingService, private logger: LoggerService) {
     }
 
     async ngOnInit() {
-        this.http.handle(await this.http.evaluate(this.http.getTestUser()), (result) => {
-            this.user = result;
-        }, "Could not get User!");
+        // Just for testing
+        await this.http.login("jonaspfeifer@drei.at", "532eaabd9574880dbf76b9b8cc00832c20a6ec113d682299550d7a6e0f345e25");
 
-        this.http.handle(await this.http.evaluate(this.http.getTestLastNGames(100)), (result) => {
+        this.http.handle(await this.http.evaluate(await this.http.getUserData()), result => {
+            this.logger.log("Got user data!", LoggingType.INFORMATIONAL);
+            this.user = result;
+        }, "Failed to get user with token!");
+
+        this.http.handle(await this.http.evaluate(await this.http.getUserHistory(100)), result => {
+            this.logger.log("Got user game histories!", LoggingType.INFORMATIONAL);
             this.histories = result;
+
+            this.histories = this.histories.map(value => {
+                let tmp = value;
+                tmp.won = (value.won as any)["data"][0] === 1;
+                return tmp;
+            });
+
             this.renderChart();
-        }, "Could not get Game History!")
+        }, "Couldnt get user History");
     }
 
     renderChart() {
@@ -41,7 +55,7 @@ export class DashboardComponent {
             labels: labels,
             datasets: [{
                 label: 'Profit Curve',
-                data: labels.map(value => this.histories[this.histories.length - value].profit),
+                data: labels.map(value => this.histories[this.histories.length - value].profit/100),
             }]
         };
 

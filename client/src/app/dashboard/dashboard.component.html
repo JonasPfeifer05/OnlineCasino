@@ -35,7 +35,7 @@
             <div id="accountBalance">
                 <div id="moneyAmount">
                     <div>Current Balance:</div>
-                    <div id="balance">{{user.money |number:'1.2-2'}}€</div>
+                    <div id="balance">{{user.money/100 |number:'1.2-2'}}€</div>
                 </div>
                 <hr>
                 <div id="profitCurve">
@@ -45,7 +45,7 @@
             <div id="history">
                 <div id="historyContent">
                     <ul>
-                        <li *ngFor="let history of histories">
+                        <li *ngFor="let history of histories.reverse()">
                             <game-history [history]="history"></game-history>
                         </li>
                     </ul>

@@ -30,6 +30,40 @@ export class UsersRouter {
             res.status(200).json(user);
         })
 
+        this.router.post("/change", async (req, res) => {
+            let error: Error|undefined;
+
+            let userData: UserToken = await this.service.authenticateJWT(req.headers.authorization, process.env.JWT_AUTH_TOKEN).catch(reason => error = reason);
+            if (error) return res.status(400).json({message: error.message});
+
+            let user: User = await this.service.changeUser(userData, req.body).catch(reason => error = reason);
+            if (error) return res.status(400).json({message: (error as Error).message});
+
+            res.status(200).json(user);
+        });
+
+        this.router.post("/deactivate", async (req, res) => {
+            let error: Error | undefined;
+
+            let userData: UserToken = await this.service.authenticateJWT(req.headers.authorization, process.env.JWT_AUTH_TOKEN).catch(reason => error = reason);
+            if (error) return res.status(400).json({message: error.message});
+
+            await this.service.changeActive(userData, false);
+
+            res.status(200).json({message: "success"})
+        });
+
+        this.router.post("/activate", async (req, res) => {
+            let error: Error | undefined;
+
+            let userData: UserToken = await this.service.authenticateJWT(req.headers.authorization, process.env.JWT_AUTH_TOKEN).catch(reason => error = reason);
+            if (error) return res.status(400).json({message: error.message});
+
+            await this.service.changeActive(userData, true);
+
+            res.status(200).json({message: "success"})
+        });
+
         this.router.post("/login", async (req, res) => {
             let error: Error | undefined;
 
@@ -46,6 +80,15 @@ export class UsersRouter {
             if (error) return res.status(400).json({message: (error as Error).message});
 
             res.status(200).json({token: token});
+        })
+
+        this.router.get("/validate", async (req, res) => {
+            let error: Error|undefined;
+
+            await this.service.authenticateJWT(req.headers.authorization, process.env.JWT_AUTH_TOKEN).catch(reason => error = reason);
+            if (error) return res.status(400).json({valid: false});
+
+            res.status(200).json({valid: true});
         })
     }
 }
