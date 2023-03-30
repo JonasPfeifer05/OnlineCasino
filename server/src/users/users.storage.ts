@@ -1,64 +1,43 @@
 import {User} from "./user";
-import {singleSqlQuery} from "../db";
+import {sqlQuery} from "../db";
+const MOMENT= require( 'moment' );
 
 export class UsersStorage {
     async getUser(email: string, password: string): Promise<User> {
-        let sql = `
+        let result = await sqlQuery<User[]>(`
             SELECT * FROM casino.users
-            WHERE email = '${email}' AND password = '${password}';
-        `
+            WHERE email = ? AND password = ?;
+        `, [email, password]);
 
-        return await singleSqlQuery<User>(sql)
-            .catch(reason => {
-                throw reason;
-            });
+        return result[0];
     }
 
     async createUser(data: User): Promise<User|undefined> {
-        let sql = `
+        let result: User[][] = await sqlQuery<User[][]>(`
             INSERT INTO casino.users ( email, password, first_name, last_name, username) 
-            VALUES (N'${data.email}', N'${data.password}', N'${data.first_name}', N'${data.last_name}', N'${data.username}');
-        `
-        sql += `
+            VALUES (?, ?, ?, ?, ?);
             SELECT * FROM casino.users WHERE users_id = LAST_INSERT_ID();
-        `
+        `, [data.email, data.password, data.first_name, data.last_name, data.username]);
 
-        let user: User|undefined;
-        await singleSqlQuery<User>(sql, 1)
-            .then(value => user = value)
-            .catch(reason => {
-                throw reason;
-            })
-
-        return user;
+        return result[1][0];
     }
 
-    async changeUser(data: User, old: User) {
-        let sql = "UPDATE casino.users SET "
+    async changeUser(data: User): Promise<User> {
+        let result = await sqlQuery<User[][]>(`
+            UPDATE casino.users
+            SET email = ?, password = ?, first_name = ?, last_name = ?, username = ?
+            WHERE users_id = ?;
+            SELECT * FROM casino.users WHERE users_id = ?;
+        `, [data.email, data.password, data.first_name, data.last_name, data.username, data.users_id, data.users_id]);
 
-        if (data.email) sql += "email='"+data.email+"',";
-        if (data.password) sql += "password='"+data.password+"',";
-        if (data.first_name) sql += "first_name='"+data.first_name+"',";
-        if (data.last_name) sql += "last_name='"+data.last_name+"',";
-        if (data.username) sql += "username='"+data.username+"',";
-        sql = sql.substring(0, sql.length-1);
-        sql += " WHERE users_id='"+old.users_id+"';";
-        sql += "SELECT * FROM casino.users WHERE users_id = "+old.users_id+";"
-
-        let user: User = await singleSqlQuery<User>(sql, 1)
-            .catch(reason => {
-                throw reason;
-            })
-
-        return user;
+        return result[1][0];
     }
 
     async setActive(email: string, active: boolean) {
-        let sql = "UPDATE casino.users SET deactivated_since="+(active ? "null" : "(curdate())")+", deactivated="+!active+" WHERE email='"+email+"';";
-
-        await singleSqlQuery(sql)
-            .catch(reason => {
-                throw reason;
-            })
+        sqlQuery(`
+            UPDATE casino.users
+            SET deactivated = ?, deactivated_since = ?
+            WHERE email = ?;
+        `, [!active, !active ? MOMENT().format("YYYY-MM-DD"):null, email]);
     }
 }

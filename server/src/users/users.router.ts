@@ -11,17 +11,16 @@ export class UsersRouter {
         this.router = Router();
         this.service = new UsersService();
 
-        this.router.post("/create", async (req, res) => {
+        this.router.post("/", async (req, res) => {
             let error: Error|undefined;
             let user: User = await this.service.createUser(req.body).catch(reason => error = reason);
-
 
             if (error) return res.status(400).json({message: error.message});
 
             res.status(200).json(user);
         })
 
-        this.router.post("/get", async (req, res) => {
+        this.router.get("/", async (req, res) => {
             let error: Error|undefined;
 
             let userData: UserToken = await this.service.authenticateJWT(req.headers.authorization, process.env.JWT_AUTH_TOKEN).catch(reason => error = reason);
@@ -31,7 +30,7 @@ export class UsersRouter {
             res.status(200).json(user);
         })
 
-        this.router.post("/change", async (req, res) => {
+        this.router.put("/", async (req, res) => {
             let error: Error|undefined;
 
             let userData: UserToken = await this.service.authenticateJWT(req.headers.authorization, process.env.JWT_AUTH_TOKEN).catch(reason => error = reason);
@@ -43,7 +42,7 @@ export class UsersRouter {
             res.status(200).json(user);
         });
 
-        this.router.post("/deactivate", async (req, res) => {
+        this.router.put("/deactivate", async (req, res) => {
             let error: Error | undefined;
 
             let userData: UserToken = await this.service.authenticateJWT(req.headers.authorization, process.env.JWT_AUTH_TOKEN).catch(reason => error = reason);
@@ -54,7 +53,7 @@ export class UsersRouter {
             res.status(200).json({message: "success"})
         });
 
-        this.router.post("/activate", async (req, res) => {
+        this.router.put("/activate", async (req, res) => {
             let error: Error | undefined;
 
             let userData: UserToken = await this.service.authenticateJWT(req.headers.authorization, process.env.JWT_AUTH_TOKEN).catch(reason => error = reason);

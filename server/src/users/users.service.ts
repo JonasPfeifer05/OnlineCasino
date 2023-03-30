@@ -5,7 +5,6 @@ import {UserToken} from "./user-token";
 const jwt = require("jsonwebtoken")
 
 export class UsersService {
-
     storage: UsersStorage;
 
     constructor() {
@@ -17,6 +16,7 @@ export class UsersService {
 
         let error: Error|undefined;
         let result: User = await this.storage.getUser(data.email, data.password)
+            .then(value => value)
             .catch(reason => error = reason);
 
         if (error) throw new Error("Email or Password is wrong!");
@@ -106,32 +106,33 @@ export class UsersService {
     async changeUser(userData: UserToken, data: User): Promise<User> {
         let error: Error|undefined;
 
-        let result: User = await this.storage.getUser(userData.email, userData.password)
+        if (!(data.email || data.password || data.last_name || data.first_name || data.username)) throw new Error("Must specify at least one field!")
+
+        let oldUser: User = await this.storage.getUser(userData.email, userData.password)
             .catch(reason => error = reason);
 
         if (error) throw new Error("Email or Password is wrong!");
-        if (!result) throw new Error("There is no such User!");
+        if (!oldUser) throw new Error("There is no such User!");
 
-        if (!(data.email || data.password || data.last_name || data.first_name || data.username)) throw new Error("Must specify at least one field!")
+        data.users_id = oldUser.users_id;
 
-        if (data.email) data.email = data.email.trim();
-        if (data.password) data.password = data.password.trim();
-        if (data.first_name) data.first_name = data.first_name.trim();
-        if (data.last_name) data.last_name = data.last_name.trim();
-        if (data.username) data.username = data.username.trim();
+        if (data.email) data.email = data.email.trim(); else data.email = oldUser.email;
+        if (data.password) data.password = data.password.trim(); else data.password = oldUser.password;
+        if (data.first_name) data.first_name = data.first_name.trim(); else data.first_name = oldUser.first_name;
+        if (data.last_name) data.last_name = data.last_name.trim(); else data.last_name = oldUser.last_name;
+        if (data.username) data.username = data.username.trim(); else data.username = oldUser.username;
 
-        if (data.email && data.email.length === 0) throw new Error("Invalid Data passed!")
-        if (data.password && data.password.length === 0) throw new Error("Invalid Data passed!")
-        if (data.first_name && data.first_name.length === 0) throw new Error("Invalid Data passed!")
-        if (data.last_name && data.last_name.length === 0) throw new Error("Invalid Data passed!")
-        if (data.username && data.username.length === 0) throw new Error("Invalid Data passed!")
+        if (data.email && data.email.length === 0) throw new Error("Invalid email passed!")
+        if (data.password && data.password.length === 0) throw new Error("Invalid password passed!")
+        if (data.first_name && data.first_name.length === 0) throw new Error("Invalid first name passed!")
+        if (data.last_name && data.last_name.length === 0) throw new Error("Invalid last name passed!")
+        if (data.username && data.username.length === 0) throw new Error("Invalid username passed!")
 
-        let user: User = await this.storage.changeUser(data, result).catch(reason => error = reason);
+        let newUser: User = await this.storage.changeUser(data).catch(reason => error = reason);
 
         if (error) throw new Error("Email or Username is already in use!");
-        if (!user) throw new Error("Failed to create User!");
 
-        return user;
+        return newUser;
     }
 
     async changeActive(userData: UserToken, active: boolean) {
