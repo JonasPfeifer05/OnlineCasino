@@ -31,9 +31,9 @@ export class LoginComponent {
     // can be changed if necessary
 
     async handleLogin() {
-
-        if (!await this.networkingService.login(this.eMailAddress, shajs("sha256").update(this.password).digest("hex"))) {
-            alert("E-Mail-Adresse oder Passwort ungueltig!")
+        let result = await this.networkingService.login(this.eMailAddress, shajs("sha256").update(this.password).digest("hex"));
+        if (!result[0]) {
+            alert(result[1])
         } else {
             await this.router.navigate(["dashboard"])
         }
@@ -41,11 +41,12 @@ export class LoginComponent {
     }
 
     async handleSignUp() {
+        let result = await this.networkingService.signUp(this.username, this.firstName, this.lastName, this.eMailAddress, shajs("sha256").update(this.password).digest("hex"));
         if (this.checkPassword()) {
-            if (await this.networkingService.signUp(this.username, this.firstName, this.lastName, this.eMailAddress, shajs("sha256").update(this.password).digest("hex"))) {
+            if (result[0]) {
                 await this.router.navigate(["dashboard"])
             } else {
-                alert("Username or E-Mail already in use!")
+                alert(result[1])
             }
         } else {
             alert("Password Confirmation wrong!")

@@ -41,6 +41,9 @@ export class UsersService {
         if (!UsersService.checkPassword(data.password)) throw new Error("Invalid password passed!");
         if (!UsersService.checkEmail(data.email)) throw new Error("Invalid email passed!");
 
+        console.log(data.email);
+        console.log(UsersService.checkEmail(data.email));
+
         let user: User|undefined;
         let error: Error|undefined;
         await this.storage.createNewUser(data)

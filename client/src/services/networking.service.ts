@@ -58,17 +58,20 @@ export class NetworkingService {
         return valid;
     }
 
-    async login(email: string, password: string): Promise<boolean> {
+    async login(email: string, password: string): Promise<[boolean, string]> {
         let observable = this.http.post<{access_token: string, refresh_token: string}>(this.api+"users/login", {email, password});
 
         let loggedIn = false;
-        this.handle(await this.evaluate(observable), result => {
+        let result = await this.evaluate(observable);
+        this.handle(result, result => {
             loggedIn = true;
             sessionStorage.setItem("access_token", result.access_token);
             sessionStorage.setItem("refresh_token", result.refresh_token);
         }, "Failed to log user in!");
 
-        return loggedIn;
+        let error = result[1]?.error["message"];
+
+        return [loggedIn, error];
     }
 
     static cleatTokens() {
@@ -76,17 +79,20 @@ export class NetworkingService {
         sessionStorage.setItem("refresh_token", "");
     }
 
-    async signUp(username: string, first_name: string, last_name: string, email: string, password: string): Promise<boolean> {
+    async signUp(username: string, first_name: string, last_name: string, email: string, password: string): Promise<[boolean, string]> {
         let observable = this.http.post<{access_token: string, refresh_token: string}>(this.api+"users/", {username, first_name, last_name, email, password});
 
         let signedUp = false;
-        await this.handle(await this.evaluate(observable), async () => {
+        let result = await this.evaluate(observable);
+        await this.handle(result, async () => {
                 signedUp = true;
                 await this.login(email, password)
             },
             "Failed to create user!");
 
-        return signedUp;
+        let error = result[1]?.error["message"];
+
+        return [signedUp, error];
     }
     async getUserData(): Promise<Observable<User>> {
         if (!await this.checkTokens()) throw new Error("Couldnt authorize User! Must log in again!");
