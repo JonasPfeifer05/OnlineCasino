@@ -2,6 +2,16 @@ import {Component} from '@angular/core';
 import {NetworkingService} from "../../services/networking.service";
 import * as shajs from "sha.js";
 import {Router} from "@angular/router";
+import {User} from "../../objects/user";
+import {
+    AbstractControl,
+    FormControl,
+    FormGroup,
+    ValidationErrors,
+    Validator,
+    ValidatorFn,
+    Validators
+} from "@angular/forms";
 
 @Component({
     selector: 'app-login',
@@ -11,12 +21,20 @@ import {Router} from "@angular/router";
 export class LoginComponent {
 
     login: boolean = true;
-    username: string = "";
-    firstName: string = "";
-    lastName: string = "";
-    eMailAddress: string = "";
-    password: string = "";
-    passwordConfirmation: string = "";
+
+    registerForm = new FormGroup({
+        username: new FormControl("", Validators.required),
+        firstName: new FormControl("", Validators.required),
+        lastName: new FormControl("", Validators.required),
+        eMail: new FormControl("", [Validators.required, Validators.email]),
+        password: new FormControl("", [Validators.required, Validators.minLength(8)]),
+        passwordConfirm: new FormControl("", [Validators.required, Validators.minLength(8)])
+    }, {validators: passwordMatch})
+
+    loginForm = new FormGroup({
+        eMail: new FormControl("", Validators.required),
+        password: new FormControl("", [Validators.required, Validators.minLength(8)])
+    })
 
 
     constructor(private networkingService: NetworkingService, private router: Router) {
@@ -32,7 +50,9 @@ export class LoginComponent {
 
     async handleLogin() {
 
-        if (!await this.networkingService.login(this.eMailAddress, shajs("sha256").update(this.password).digest("hex"))) {
+        let result = await this.networkingService.login(<string>this.getLoginEmail?.value, shajs("sha256").update(<string>this.getLoginPassword?.value).digest("hex"))
+
+        if (!) {
             alert("E-Mail-Adresse oder Passwort ungueltig!")
         } else {
             await this.router.navigate(["dashboard"])
@@ -41,23 +61,14 @@ export class LoginComponent {
     }
 
     async handleSignUp() {
-        if (this.checkPassword()) {
-            if (await this.networkingService.signUp(this.username, this.firstName, this.lastName, this.eMailAddress, shajs("sha256").update(this.password).digest("hex"))) {
-                await this.router.navigate(["dashboard"])
-            } else {
-                alert("Username or E-Mail already in use!")
-            }
+        if (await this.networkingService.signUp(<string>this.getRegisterUsername?.value, <string>this.getRegisterFirstname?.value, <string>this.getRegisterLastname?.value, <string>this.getRegisterEmail?.value, shajs("sha256").update(<string>this.getRegisterPassword?.value).digest("hex"))) {
+            await this.router.navigate(["dashboard"])
         } else {
-            alert("Password Confirmation wrong!")
+            alert("Username or E-Mail already in use!")
         }
+
     }
 
-    checkPassword(): boolean {
-        if (this.password !== "" && this.passwordConfirmation !== "") {
-            return this.password === this.passwordConfirmation;
-        }
-        return false;
-    }
 
     async logInSignUp() {
         if (this.login) {
@@ -66,4 +77,44 @@ export class LoginComponent {
             await this.handleSignUp();
         }
     }
+
+    get getRegisterUsername() {
+        return this.registerForm.get("username");
+    }
+
+    get getRegisterFirstname() {
+        return this.registerForm.get("firstName");
+    }
+
+    get getRegisterLastname() {
+        return this.registerForm.get("lastName");
+    }
+
+    get getRegisterEmail() {
+        return this.registerForm.get("eMail");
+    }
+
+    get getRegisterPassword() {
+        return this.registerForm.get("password");
+    }
+
+    get getRegisterPasswordConfirm() {
+        return this.registerForm.get("passwordConfirm");
+    }
+
+    get getLoginEmail() {
+        return this.loginForm.get("eMail");
+    }
+
+    get getLoginPassword() {
+        return this.loginForm.get("password");
+    }
 }
+
+export const passwordMatch: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
+    const password = control.get("password");
+    const passwordConfirm = control.get("passwordConfirm");
+
+    return password && passwordConfirm && password.value !== passwordConfirm.value ? {passwordsDiffer: true} : null;
+}
+

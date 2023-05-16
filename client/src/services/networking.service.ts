@@ -136,4 +136,16 @@ export class NetworkingService {
             this.logger.log(errorMessage, LoggingType.ERROR);
         }
     }
+
+    async change(username: string, first_name: string, last_name: string, email: string): Promise<boolean>{
+        let observable = this.http.post<{access_token: string, refresh_token: string}>(this.api+"users/change", {username, first_name, last_name, email});
+
+        let changed = false;
+        await this.handle(await this.evaluate(observable), async result => {
+                changed = true;
+            },
+            "Failed to change user!");
+
+        return changed;
+    }
 }

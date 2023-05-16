@@ -10,7 +10,7 @@
 
     <!--    </div>-->
 
-    <form id="formWrapper" [noValidate]="false" (submit)="logInSignUp()">
+    <div id="formWrapper">
 
         <h1 class="header" *ngIf="login else signupHeader">Login</h1>
         <ng-template #signupHeader>
@@ -27,29 +27,79 @@
         </div>
 
 
-        <div class="inputs" *ngIf="!login else logIn">
-            <section class="inputSections"><label>Username</label><input [(ngModel)]="username" placeholder="Username" type="text" required [ngModelOptions]="{standalone: true}"></section>
-            <section class="inputSections"><label>Firstname</label><input [(ngModel)]="firstName" placeholder="Firstname" type="text" required [ngModelOptions]="{standalone: true}"></section>
-            <section class="inputSections"><label>Lastname</label><input [(ngModel)]="lastName" placeholder="LastName" type="text" required [ngModelOptions]="{standalone: true}"></section>
-            <section class="inputSections"><label>E-Mail</label><input [(ngModel)]="eMailAddress" placeholder="E-Mail" type="email" required [ngModelOptions]="{standalone: true}"></section>
-            <section class="inputSections"><label>Password</label><input [(ngModel)]="password" placeholder="Password" type="password" required minlength="8" [ngModelOptions]="{standalone: true}"></section>
-            <section class="inputSections"><label>Confirm Password</label><input [(ngModel)]="passwordConfirmation" placeholder="Confirm Password" type="password" required minlength="8" [ngModelOptions]="{standalone: true}"></section>
-        </div>
-        <ng-template #logIn>
-            <div class="inputs">
-                <section class="inputSections"><label>E-Mail</label><input [(ngModel)]="eMailAddress" placeholder="E-Mail" type="email" required [ngModelOptions]="{standalone: true}"></section>
-                <section class="inputSections"><label>Password</label><input [(ngModel)]="password" placeholder="Password" type="password" required minlength="8" [ngModelOptions]="{standalone: true}"></section>
+        <form *ngIf="!login else registerTemplate" [formGroup]="registerForm" (ngSubmit)="logInSignUp()" class="forms">
+            <div class="formElement">
+                <label for="username">Username</label>
+                <input class="form-control" id="username" formControlName="username" placeholder="Username">
+                <div *ngIf="getRegisterUsername?.invalid && getRegisterUsername?.touched">
+                    <div *ngIf="getRegisterUsername?.value === ''" class="alert alert-danger">Username must be set!</div>
+                </div>
             </div>
+            <div class="formElement">
+                <label for="first_name">Firstname</label>
+                <input class="form-control" id="first_name" formControlName="firstName" placeholder="Firstname">
+                <div *ngIf="getRegisterFirstname?.invalid && getRegisterFirstname?.touched">
+                    <div *ngIf="getRegisterFirstname?.value === ''" class="alert alert-danger">Firstname must be set!</div>
+                </div>
+            </div>
+            <div class="formElement">
+                <label for="last_name">Lastname</label>
+                <input class="form-control" id="last_name" formControlName="lastName" placeholder="Lastname">
+                <div *ngIf="getRegisterLastname?.invalid && getRegisterLastname?.touched">
+                    <div *ngIf="getRegisterLastname?.value === ''" class="alert alert-danger">Lastname must be set!</div>
+                </div>
+            </div>
+            <div class="formElement">
+                <label for="e_mail">E-Mail</label>
+                <input class="form-control" id="e_mail" formControlName="eMail" placeholder="E-Mail">
+                <div *ngIf="getRegisterEmail?.invalid && getRegisterEmail?.touched">
+                    <div *ngIf="getRegisterEmail?.value === '' else eMailInvalid" class="alert alert-danger">E-Mail must be set!</div>
+                    <ng-template #eMailInvalid>
+                        <div *ngIf="getRegisterEmail?.errors?.['email']" class="alert alert-danger">E-Mail must be a valid E-Mail!</div>
+                    </ng-template>
+                </div>
+            </div>
+            <div class="formElement">
+                <label for="password">Password</label>
+                <input class="form-control" id="password" type="password" formControlName="password"
+                       placeholder="Password">
+                <div *ngIf="getRegisterPassword?.invalid && getRegisterPassword?.touched">
+                    <div *ngIf="getRegisterPassword?.value === ''" class="alert alert-danger">Password must be set!</div>
+                </div>
+            </div>
+            <div class="formElement">
+                <label for="passwordConfirm">Confirm Password</label>
+                <input class="form-control" id="passwordConfirm" type="password" formControlName="passwordConfirm"
+                       placeholder="Confirm Password">
+                <div *ngIf="getRegisterPasswordConfirm?.invalid && getRegisterPasswordConfirm?.touched">
+                    <div *ngIf="getRegisterPasswordConfirm?.value === ''" class="alert alert-danger">Confirm Password must be set!</div>
+                </div>
+            </div>
+            <div class="alert alter-danger" *ngIf="loginForm?.errors?.['passwordsDiffer']">
+                Password and Confirm Password have to be the same!
+            </div>
+            <div class="buttonContainer">
+                <button [disabled]="!registerForm.valid" class="btn btn-success">Register</button>
+            </div>
+        </form>
+        <ng-template #registerTemplate>
+            <form [formGroup]="loginForm" class="forms" (ngSubmit)="logInSignUp()">
+                <div class="formElement">
+                    <label for="login_email">Username</label>
+                    <input class="form-control" id="login_email" formControlName="eMail" placeholder="E-Mail">
+                </div>
+                <div class="formElement">
+                    <label for="login_password">Password</label>
+                    <input class="form-control" id="login_password" type="password" formControlName="password"
+                           placeholder="Password">
+                </div>
+                <div class="buttonContainer">
+                    <button [disabled]="!loginForm.valid" class="btn btn-success">Login</button>
+                </div>
+            </form>
         </ng-template>
 
-        <div id="buttons">
-
-            <input *ngIf="login else signUpButton" class="loginButtons" type="submit" value="Login">
-            <ng-template #signUpButton><input class="loginButtons" type="submit" value="Sign Up"></ng-template>
-
-        </div>
-
-    </form>
+    </div>
 
 
 </div>

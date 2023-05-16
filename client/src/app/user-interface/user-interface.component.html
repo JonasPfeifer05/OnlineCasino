@@ -1,1 +1,18 @@
-<p>user-interface works!</p>
+<div id="formContainer">
+    <form id="formWrapper">
+        <div class="inputs">
+            <section class="inputSections"><label>Username</label><input [(ngModel)]="username" [disabled]="changeActive" [ngModelOptions]="{standalone: true}"></section>
+            <section class="inputSections"><label>First Name</label><input [(ngModel)]="first_name" [disabled]="changeActive" [ngModelOptions]="{standalone: true}"></section>
+            <section class="inputSections"><label>Last Name</label><input [(ngModel)]="last_name" [disabled]="changeActive" [ngModelOptions]="{standalone: true}"></section>
+            <section class="inputSections"><label>E-Mail</label><input [(ngModel)]="email" [disabled]="changeActive" [ngModelOptions]="{standalone: true}"></section>
+        </div>
+
+        <div id="buttons">
+            <input *ngIf="changeActive else confirmChange" class="changeButtons" type="submit" value="Change" (click)="changeActivate()">
+            <ng-template #confirmChange>
+                <input class="changeButtons" type="submit" value="Confirm Change" (click)="change()">
+            </ng-template>
+        </div>
+    </form>
+</div>
+

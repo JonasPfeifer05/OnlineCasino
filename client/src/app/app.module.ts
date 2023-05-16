@@ -7,9 +7,10 @@ import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { GameHistoryComponent } from './game-history/game-history.component';
 import {LoginComponent} from "./login/login.component";
-import {FormsModule} from "@angular/forms";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {RouterModule} from "@angular/router";
 import {AuthInterceptor} from "../services/auth.interceptor";
+import {UserInterfaceComponent} from "./user-interface/user-interface.component";
 
 
 @NgModule({
@@ -17,14 +18,16 @@ import {AuthInterceptor} from "../services/auth.interceptor";
         AppComponent,
         DashboardComponent,
         GameHistoryComponent,
-        LoginComponent
+        LoginComponent,
+        UserInterfaceComponent
     ],
     imports: [
         HttpClientModule,
         BrowserModule,
         AppRoutingModule,
         FormsModule,
-        RouterModule
+        RouterModule,
+        ReactiveFormsModule
     ],
   providers: [
       {
