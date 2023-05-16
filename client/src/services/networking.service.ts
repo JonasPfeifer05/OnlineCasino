@@ -80,13 +80,13 @@ export class NetworkingService {
     }
 
     async signUp(username: string, first_name: string, last_name: string, email: string, password: string): Promise<[boolean, string]> {
-        let observable = this.http.post<{access_token: string, refresh_token: string}>(this.api+"users/", {username, first_name, last_name, email, password});
+        let observable = this.http.post<User>(this.api+"users/", {username, first_name, last_name, email, password});
 
         let signedUp = false;
         let result = await this.evaluate(observable);
-        await this.handle(result, async () => {
+        await this.handle(result, () => {
                 signedUp = true;
-                await this.login(email, password)
+
             },
             "Failed to create user!");
 

@@ -32,7 +32,7 @@ export class LoginComponent {
     }, {validators: passwordMatch})
 
     loginForm = new FormGroup({
-        eMail: new FormControl("", Validators.required),
+        eMail: new FormControl("", [Validators.required, Validators.email]),
         password: new FormControl("", [Validators.required, Validators.minLength(8)])
     })
 
@@ -52,8 +52,8 @@ export class LoginComponent {
 
         let result = await this.networkingService.login(<string>this.getLoginEmail?.value, shajs("sha256").update(<string>this.getLoginPassword?.value).digest("hex"))
 
-        if (!) {
-            alert("E-Mail-Adresse oder Passwort ungueltig!")
+        if (!result[0]) {
+            alert(result[1])
         } else {
             await this.router.navigate(["dashboard"])
         }
@@ -61,10 +61,16 @@ export class LoginComponent {
     }
 
     async handleSignUp() {
-        if (await this.networkingService.signUp(<string>this.getRegisterUsername?.value, <string>this.getRegisterFirstname?.value, <string>this.getRegisterLastname?.value, <string>this.getRegisterEmail?.value, shajs("sha256").update(<string>this.getRegisterPassword?.value).digest("hex"))) {
-            await this.router.navigate(["dashboard"])
+
+        let result = await this.networkingService.signUp(<string>this.getRegisterUsername?.value, <string>this.getRegisterFirstname?.value, <string>this.getRegisterLastname?.value, <string>this.getRegisterEmail?.value, shajs("sha256").update(<string>this.getRegisterPassword?.value).digest("hex"))
+
+        if (!result[0]) {
+            alert(result[1])
         } else {
-            alert("Username or E-Mail already in use!")
+            setTimeout(async () => {
+                await this.networkingService.login(<string>this.getRegisterEmail?.value, shajs("sha256").update(<string>this.getRegisterPassword?.value).digest("hex"));
+                await this.router.navigate(["dashboard"])
+            }, 100);
         }
 
     }
