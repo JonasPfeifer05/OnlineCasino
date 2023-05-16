@@ -10,7 +10,7 @@ export class HistoriesRouter {
         this.router = Router();
         this.historiesService = new HistoriesService();
 
-        this.router.post("/get", async (req, res) => {
+        this.router.post("/", async (req, res) => {
             let error: Error | undefined;
 
             let histories: History[] = await this.historiesService.getHistories(req.headers.authorization, req.body.amount).catch(reason => error = reason);

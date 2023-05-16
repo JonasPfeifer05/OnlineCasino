@@ -1,7 +1,6 @@
-export class UserToken {
+export class JsonWebTokenData {
     email: string;
     password: string;
-
 
     constructor(email: string, password: string) {
         this.email = email;
