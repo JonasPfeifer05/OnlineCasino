@@ -1,4 +1,4 @@
-export class UserToken {
+export class JsonWebTokenData {
     email: string;
     password: string;
 

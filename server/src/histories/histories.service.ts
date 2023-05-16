@@ -1,5 +1,5 @@
 import {UsersService} from "../users/users.service";
-import {UserToken} from "../users/user-token";
+import {JsonWebTokenData} from "../users/json-web-token-data";
 import {History} from "./history";
 import {HistoriesStorage} from "./histories.storage";
 import {User} from "../users/user";
@@ -18,9 +18,9 @@ export class HistoriesService {
 
         let error: Error|undefined;
 
-        let userData: UserToken = await this.usersService.authenticateJWT(auth, process.env.JWT_AUTH_TOKEN).catch(reason => error = reason);
+        let userData: JsonWebTokenData = await this.usersService.authenticateJsonWebToken(auth, process.env.JWT_AUTH_TOKEN).catch(reason => error = reason);
         if (error) throw error;
-        let user: User = await this.usersService.getUser(userData as User).catch(reason => error = reason);
+        let user: User = await this.usersService.getUserData(userData as User).catch(reason => error = reason);
 
         let histories: History[] = await this.historiesStorage.getHistories(user.users_id, amount).catch(reason => error = reason);
         if (error) throw error;
@@ -33,9 +33,9 @@ export class HistoriesService {
 
         if (!historyData.game_id === undefined || !historyData.won || !historyData.wage || !historyData.profit) throw new Error("Not enough data passed!");
 
-        let userData: UserToken = await this.usersService.authenticateJWT(auth, process.env.JWT_AUTH_TOKEN).catch(reason => error = reason);
+        let userData: JsonWebTokenData = await this.usersService.authenticateJsonWebToken(auth, process.env.JWT_AUTH_TOKEN).catch(reason => error = reason);
         if (error) throw error;
-        let user: User = await this.usersService.getUser(userData as User).catch(reason => error = reason);
+        let user: User = await this.usersService.getUserData(userData as User).catch(reason => error = reason);
 
         let history: History = await this.historiesStorage.addHistory(user.users_id, historyData).catch(reason => error = reason);
         if (error) throw error;

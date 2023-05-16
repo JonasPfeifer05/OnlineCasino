@@ -1,9 +1,9 @@
 import {User} from "./user";
 import {sqlQuery} from "../db";
-const MOMENT= require( 'moment' );
+const current_time = require( 'moment' );
 
 export class UsersStorage {
-    async getUser(email: string, password: string): Promise<User> {
+    async getUserData(email: string, password: string): Promise<User> {
         let result = await sqlQuery<User[]>(`
             SELECT * FROM casino.users
             WHERE email = ? AND password = ?;
@@ -12,18 +12,20 @@ export class UsersStorage {
         return result[0];
     }
 
-    async createUser(data: User): Promise<User|undefined> {
-        let result: User[][] = await sqlQuery<User[][]>(`
+    async createNewUser(data: User): Promise<User|undefined> {
+        let result: [unknown, User[]] = await sqlQuery<[unknown, User[]]>(`
             INSERT INTO casino.users ( email, password, first_name, last_name, username) 
             VALUES (?, ?, ?, ?, ?);
             SELECT * FROM casino.users WHERE users_id = LAST_INSERT_ID();
         `, [data.email, data.password, data.first_name, data.last_name, data.username]);
 
+        console.log(result)
+
         return result[1][0];
     }
 
-    async changeUser(data: User): Promise<User> {
-        let result = await sqlQuery<User[][]>(`
+    async changeUserData(data: User): Promise<User> {
+        let result: [unknown, User[]] = await sqlQuery<[unknown, User[]]>(`
             UPDATE casino.users
             SET email = ?, password = ?, first_name = ?, last_name = ?, username = ?
             WHERE users_id = ?;
@@ -33,11 +35,11 @@ export class UsersStorage {
         return result[1][0];
     }
 
-    async setActive(email: string, active: boolean) {
-        sqlQuery(`
+    async changeActive(email: string, active: boolean) {
+        await sqlQuery(`
             UPDATE casino.users
             SET deactivated = ?, deactivated_since = ?
             WHERE email = ?;
-        `, [!active, !active ? MOMENT().format("YYYY-MM-DD"):null, email]);
+        `, [!active, !active ? current_time().format("YYYY-MM-DD") : null, email]);
     }
 }
