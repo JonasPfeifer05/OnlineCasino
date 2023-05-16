@@ -6,7 +6,6 @@ export class History {
     wage: number;
     profit: number;
 
-
     constructor(history_id: number, users_id: number, game_id: number, won: boolean, wage: number, profit: number) {
         this.history_id = history_id;
         this.users_id = users_id;
