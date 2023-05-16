@@ -74,9 +74,9 @@
                 <div *ngIf="getRegisterPasswordConfirm?.invalid && getRegisterPasswordConfirm?.touched">
                     <div *ngIf="getRegisterPasswordConfirm?.value === ''" class="alert alert-danger">Confirm Password must be set!</div>
                 </div>
-            </div>
-            <div class="alert alter-danger" *ngIf="loginForm?.errors?.['passwordsDiffer']">
-                Password and Confirm Password have to be the same!
+                <div *ngIf="this.getRegisterPasswordConfirm?.value !== '' && this.getRegisterPassword?.value !== '' && this.registerForm?.errors?.['passwordsDiffer']" class="alert alert-danger">
+                    Password and Confirm Password have to be the same!
+                </div>
             </div>
             <div class="buttonContainer">
                 <button [disabled]="!registerForm.valid" class="btn btn-success">Register</button>
