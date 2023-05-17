@@ -1,0 +1,17 @@
+<div id="adminPage">
+    <h1>Welcome to the Admin Page!</h1>
+    <div id="mask">
+        <div id="filter">
+            <input type="text" placeholder="Part of the username" [(ngModel)]="usernamePart" (keyup)="handlePress($event)">
+            <select [(ngModel)]="activateStatus">
+                <option [ngValue]="'all'">all</option>
+                <option [ngValue]="'activated'">only activated</option>
+                <option [ngValue]="'deactivated'">only deactivated</option>
+            </select>
+        </div>
+        <button id="search" (click)="search()">search</button>
+    </div>
+    <div id="output">
+
+    </div>
+</div>

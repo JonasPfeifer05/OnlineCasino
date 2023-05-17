@@ -11,6 +11,7 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {RouterModule} from "@angular/router";
 import {AuthInterceptor} from "../services/auth.interceptor";
 import {UserInterfaceComponent} from "./user-interface/user-interface.component";
+import { AdminPageComponent } from './admin-page/admin-page.component';
 
 
 @NgModule({
@@ -19,7 +20,8 @@ import {UserInterfaceComponent} from "./user-interface/user-interface.component"
         DashboardComponent,
         GameHistoryComponent,
         LoginComponent,
-        UserInterfaceComponent
+        UserInterfaceComponent,
+        AdminPageComponent
     ],
     imports: [
         HttpClientModule,
