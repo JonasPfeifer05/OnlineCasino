@@ -91,10 +91,9 @@ export class DashboardComponent implements OnInit {
                 },
                 plugins: {
                     legend: {
-                        display: false,
+                        display: true,
                         fullSize: true,
                         labels: {
-
                             // This more specific font property overrides the global property
                             font: {
                                 size: 15,

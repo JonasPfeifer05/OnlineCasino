@@ -5,7 +5,7 @@
     </div>
     <div id="payout" [class.lost]="!history.won" [class.won]="history.won">
         <div id="profitText">
-            <div id="profit">Profit: </div>
+            <div id="profit">Payout: </div>
             <div id="amount">{{(history.profit/100)|number:"1.2-2"}}€</div>
         </div>
         <img [src]="img" alt="">

@@ -11,9 +11,10 @@
     margin: 0  0 10px 0;
     padding: 20px;
 
-    border-radius: 10px;
+    border-radius: 8px;
 
-    background-color: #f0f2f1;
+    border: 3px solid #4183f1;
+    background-color: #9ad0f5;
 
     #nameWage {
         display: flex;
@@ -31,7 +32,7 @@
         align-items: center;
         gap: 10px;
 
-        min-width: 20%;
+        min-width: 22%;
         max-width: max-content;
 
         font-size: 20px;

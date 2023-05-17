@@ -43,7 +43,7 @@
                 </div>
             </div>
             <div id="history">
-                <div id="historyContent">
+                <div id="historyContent" class="scrollbar scrollbar-primary">
                     <ul>
                         <li *ngFor="let history of histories.reverse()">
                             <game-history [history]="history"></game-history>
