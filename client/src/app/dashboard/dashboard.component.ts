@@ -1,10 +1,11 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {User} from "../../objects/user";
 import {NetworkingService} from "../../services/networking.service";
 import {Chart, ChartConfiguration, ChartData, registerables} from "chart.js"
 import {GameHistory} from "../../objects/game-history";
 import {LoggerService} from "../../services/logger.service";
 import {LoggingType} from "../../objects/logging-type";
+import {min} from "rxjs";
 
 Chart.register(...registerables)
 
@@ -13,30 +14,24 @@ Chart.register(...registerables)
     templateUrl: './dashboard.component.html',
     styleUrls: ['./dashboard.component.scss']
 })
-export class DashboardComponent {
+export class DashboardComponent implements OnInit {
     user: User = User.default();
     histories: GameHistory[] = [];
 
-    constructor(private http: NetworkingService, private logger: LoggerService) {
-    }
+    historyCount = 15;
+
+    constructor(private http: NetworkingService, private logger: LoggerService) {}
 
     async ngOnInit() {
-
-        console.log(NetworkingService.getAccessToken())
-        // // Just for testing
-        // await this.http.login("jonaspfeifer@drei.at", "532eaabd9574880dbf76b9b8cc00832c20a6ec113d682299550d7a6e0f345e25");
-
-        this.http.handle(await this.http.evaluate(await this.http.getUserData()), result => {
+        this.http.handle(await this.http.evaluate(await this.http.getUserData()), user_result => {
             this.logger.log("Got user data!", LoggingType.INFORMATIONAL);
-            this.user = result;
-            if (!this.user.money){
-                this.user.money = 0;
-            }
+            this.user = user_result;
+            if (!this.user.money) this.user.money = 0;
         }, "Failed to get user with token!");
 
-        this.http.handle(await this.http.evaluate(await this.http.getUserHistory(100)), result => {
+        this.http.handle(await this.http.evaluate(await this.http.getUserHistory(this.historyCount)), histories_result => {
             this.logger.log("Got user game histories!", LoggingType.INFORMATIONAL);
-            this.histories = result;
+            this.histories = histories_result;
 
             this.histories = this.histories.map(value => {
                 let tmp = value;
@@ -49,18 +44,16 @@ export class DashboardComponent {
     }
 
     renderChart() {
-        const maxHistories = 20;
-        const historyCount = this.histories.length < maxHistories ? this.histories.length: maxHistories;
+        const historyCount = Math.min(this.historyCount, this.histories.length);
 
-        const labels = [];
-        for (let i = historyCount; i >= 1; i--) {
-            labels.push(i)
-        }
+        const labels = Array.from({length: historyCount}, (_, i) => historyCount - i);
+        const profitData = Array.from({length: historyCount}, (_, i) => this.histories[historyCount-i-1].profit/100)
+
         const data: ChartData = {
             labels: labels,
             datasets: [{
-                label: 'Profit Curve',
-                data: labels.map(value => this.histories[this.histories.length - value].profit/100),
+                label: 'profit curve',
+                data: profitData
             }]
         };
 
@@ -71,28 +64,34 @@ export class DashboardComponent {
                 maintainAspectRatio: false,
                 scales: {
                     y: {
+                        ticks: {
+                            count: 4,
+                        },
                         title: {
                             display: true,
-                            text: "Profit (€)"
+                            text: "profit (€)"
                         }
                     },
                     x: {
+                        grid: {
+                            display: false,
+                        },
                         title: {
                             display: true,
-                            text: "nth last Games"
+                            text: "nth last game"
                         }
                     }
                 },
                 elements: {
                     line: {
-                        tension: 0.2,
-                        borderWidth: 2,
+                        tension: 0.4,
+                        borderWidth: 3,
                         fill: true,
                     }
                 },
                 plugins: {
                     legend: {
-                        display: true,
+                        display: false,
                         fullSize: true,
                         labels: {
 
