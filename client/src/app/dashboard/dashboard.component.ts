@@ -39,6 +39,8 @@ export class DashboardComponent implements OnInit {
                 return tmp;
             });
 
+            this.histories = this.histories.reverse();
+
             this.renderChart();
         }, "Couldnt get user History");
     }
@@ -47,7 +49,7 @@ export class DashboardComponent implements OnInit {
         const historyCount = Math.min(this.historyCount, this.histories.length);
 
         const labels = Array.from({length: historyCount}, (_, i) => historyCount - i);
-        const profitData = Array.from({length: historyCount}, (_, i) => this.histories[historyCount-i-1].profit/100)
+        const profitData = Array.from({length: historyCount}, (_, i) => this.histories[i].profit/100)
 
         const data: ChartData = {
             labels: labels,
