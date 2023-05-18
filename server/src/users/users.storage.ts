@@ -12,6 +12,14 @@ export class UsersStorage {
         return result[0];
     }
 
+    async getAllUserData(): Promise<User[]> {
+        let result = await sqlQuery<User[]>(`
+            SELECT * FROM casino.users;
+        `);
+
+        return result;
+    }
+
     async createNewUser(data: User): Promise<User|undefined> {
         let result: [unknown, User[]] = await sqlQuery<[unknown, User[]]>(`
             INSERT INTO casino.users ( email, password, first_name, last_name, username) 

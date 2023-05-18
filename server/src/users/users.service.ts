@@ -27,6 +27,18 @@ export class UsersService {
         return result;
     }
 
+    async getAllUserData() {
+        let error: Error|undefined;
+        let result: User[] = await this.storage.getAllUserData()
+            .then(value => value)
+            .catch(reason => error = reason);
+
+        if (error) throw new Error("Failed to get all user data!");
+        if (!result) throw new Error("Failed to get all user data!");
+
+        return result;
+    }
+
     async createNewUser(data: User): Promise<User> {
         if (!data.email || !data.password || !data.first_name || !data.last_name || !data.username) throw new Error("Not enough Data passed!")
 

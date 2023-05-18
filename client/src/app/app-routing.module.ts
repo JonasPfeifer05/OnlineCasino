@@ -3,10 +3,12 @@ import { RouterModule, Routes } from '@angular/router';
 import {LoginComponent} from "./login/login.component";
 import {DashboardComponent} from "./dashboard/dashboard.component";
 import {TokenGuard} from "../services/token.guard";
+import {AdminPageComponent} from "./admin-page/admin-page.component";
 
 const routes: Routes = [
     {path: "login", component: LoginComponent},
     {path: "dashboard", component: DashboardComponent, canActivate: [TokenGuard]},
+    {path: "admin", component: AdminPageComponent, canActivate: [TokenGuard]},
     {path: "**", redirectTo: "/login", pathMatch:"full"}
 ];
 
