@@ -2,16 +2,42 @@
     <h1>Welcome to the Admin Page!</h1>
     <div id="mask">
         <div id="filter">
-            <input type="text" placeholder="Part of the username" [(ngModel)]="usernamePart" (keyup)="handlePress($event)">
-            <select [(ngModel)]="activateStatus">
+            <input type="text" class="form-control" placeholder="Part of the username" [(ngModel)]="usernamePart"
+                   (keyup)="handlePress($event)">
+            <select class="form-control" [(ngModel)]="activateStatus">
                 <option [ngValue]="'all'">all</option>
                 <option [ngValue]="'activated'">only activated</option>
                 <option [ngValue]="'deactivated'">only deactivated</option>
             </select>
         </div>
-        <button id="search" (click)="search()">search</button>
+        <button id="search" class="btn btn-success" (click)="search()">display</button>
     </div>
-    <div id="output">
-
-    </div>
+    <table id="output" class="table table-striped table-hover table-responsive">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Username</th>
+                <th scope="col">Email</th>
+                <th scope="col">First Name</th>
+                <th scope="col">Last Name</th>
+                <th scope="col">Money</th>
+                <th scope="col">Member Since</th>
+                <th scope="col">Deactivated</th>
+                <th scope="col">Deactivated Since</th>
+            </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let user of filteredUsers">
+            <th scope="row">{{user.users_id}}</th>
+            <td>{{user.username}}</td>
+            <td>{{user.email}}</td>
+            <td>{{user.first_name}}</td>
+            <td>{{user.last_name}}</td>
+            <td>{{user.money / 100}}</td>
+            <td>{{user.entry_date | date:"yyyy-MM-dd"}}</td>
+            <td>{{user.deactivated ? "true" : "false"}}</td>
+            <td>{{user.deactivated_since | date:"yyyy-MM-dd"}}</td>
+        </tr>
+        </tbody>
+    </table>
 </div>

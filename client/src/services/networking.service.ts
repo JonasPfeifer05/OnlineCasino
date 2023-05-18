@@ -100,6 +100,12 @@ export class NetworkingService {
         return this.http.get<User>(this.api+"users/", {});
     }
 
+    async getAllUserData(): Promise<Observable<User[]>> {
+        if (!await this.checkTokens()) throw new Error("Couldnt authorize User! Must log in again!");
+
+        return this.http.get<User[]>(this.api+"users/all", {});
+    }
+
     async getUserHistory(amount: number): Promise<Observable<GameHistory[]>> {
         if (!await this.checkTokens()) throw new Error("Couldnt authorize User! Must log in again!");
 
@@ -126,7 +132,7 @@ export class NetworkingService {
         if (result) {
             success(result);
         } else {
-            this.logger.log(error, LoggingType.ERROR);
+            this.logger.log(error?.message, LoggingType.ERROR);
             this.logger.log(errorMessage, LoggingType.ERROR);
         }
     }

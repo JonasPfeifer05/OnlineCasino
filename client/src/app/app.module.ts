@@ -12,6 +12,7 @@ import {RouterModule} from "@angular/router";
 import {AuthInterceptor} from "../services/auth.interceptor";
 import {UserInterfaceComponent} from "./user-interface/user-interface.component";
 import { AdminPageComponent } from './admin-page/admin-page.component';
+import { UserAdminDisplayComponent } from './user-admin-display/user-admin-display.component';
 
 
 @NgModule({
@@ -21,7 +22,8 @@ import { AdminPageComponent } from './admin-page/admin-page.component';
         GameHistoryComponent,
         LoginComponent,
         UserInterfaceComponent,
-        AdminPageComponent
+        AdminPageComponent,
+        UserAdminDisplayComponent
     ],
     imports: [
         HttpClientModule,

@@ -30,6 +30,22 @@ export class UsersRouter {
             res.status(200).json(user);
         })
 
+        this.router.get("/all", async (req, res) => {
+            let error: Error|undefined;
+
+            let userData: JsonWebTokenData = await this.service.authenticateJsonWebToken(req.headers.authorization, process.env.JWT_AUTH_TOKEN).catch(reason => error = reason);
+            if (error) return res.status(400).json({message: error.message});
+
+            if (userData.email !== "a@a.a") return res.status(400).json({message: "Not authorized for that action!"});
+
+            let error2: Error|undefined;
+            let users: User[] = await this.service.getAllUserData().catch(reason => error2 = reason);
+
+            if (error2) return res.status(400).json({message: error2.message});
+
+            res.status(200).json(users);
+        })
+
         this.router.put("/", async (req, res) => {
             let error: Error|undefined;
 
