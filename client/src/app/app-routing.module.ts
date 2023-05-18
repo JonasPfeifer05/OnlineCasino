@@ -8,7 +8,7 @@ import {AdminPageComponent} from "./admin-page/admin-page.component";
 const routes: Routes = [
     {path: "login", component: LoginComponent},
     {path: "dashboard", component: DashboardComponent, canActivate: [TokenGuard]},
-    {path: "admin", component: AdminPageComponent},
+    {path: "admin", component: AdminPageComponent, canActivate: [TokenGuard]},
     {path: "**", redirectTo: "/login", pathMatch:"full"}
 ];
 
