@@ -9,6 +9,9 @@ import cors from "cors";
 import helmet from "helmet";
 import {UsersRouter} from "./users/users.router";
 import {HistoriesRouter} from "./histories/histories.router";
+const https = require("https");
+const fs = require("fs");
+const path = require("path");
 
 dotenv.config();
 if (!process.env.PORT) {
@@ -65,9 +68,16 @@ class Application{
     }
 
     public run(){
-        this.express.listen(PORT, () => {
-            console.log(`Listening on port ${PORT}`);
-        });
+        const sslServer = https.createServer(
+            {
+                key: fs.readFileSync(path.join(__dirname, "..", "cert", "key.pem")),
+                cert: fs.readFileSync(path.join(__dirname, "..", "cert", "cert.pem"))
+            },
+            this.express
+        );
+
+        sslServer.listen(PORT, () => console.log("SSL server started"))
+
     }
 }
 

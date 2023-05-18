@@ -11,7 +11,7 @@ import {LoggingType} from "../objects/logging-type";
 })
 export class NetworkingService {
 
-    api: string = "http://localhost:7000/";
+    api: string = "https://localhost:7000/";
 
     constructor(private http: HttpClient, private logger: LoggerService) {}
 
